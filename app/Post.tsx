@@ -1,0 +1,65 @@
+"use client"
+
+import { Button } from "@/components/ui/button";
+import {
+    Card,
+    CardDescription,
+    CardContent,
+    CardHeader,
+    CardTitle
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { log } from "console";
+import { useState } from "react";
+import { set } from "zod";
+
+
+
+export default function Post({ post, updatePost, deletePost }: any) {
+
+    const [isEditing, setIsEditing] = useState(false)
+
+    const handleDelete = (id: string) => {
+        deletePost(post.id)
+    }
+
+    return (
+        <Card>
+            <CardHeader>
+                <div className="flex justify-between">
+                    <div>
+                        <CardTitle>{post.title}</CardTitle>
+                        <CardDescription>{post.body}</CardDescription>
+                    </div>
+                    <div className="gap-3 flex">
+                        <button onClick={() => setIsEditing(!isEditing)}>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                            </svg>
+
+                        </button>
+                        <button onClick={() => handleDelete(post.id)}> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                        </svg>
+                        </button>
+
+                    </div>
+
+
+                </div>
+                {isEditing && (
+                    <CardContent>
+                        <form action={updatePost}>
+                            <Input name="id" placeholder="id" defaultValue={post.id} type="hidden" />
+                            <Input name="title" placeholder="title" defaultValue={post.title} />
+                            <Input name="body" placeholder="body" defaultValue={post.body} className="mt-2 mb-2" />
+                            <Button className="w-full">update</Button>
+                        </form>
+                    </CardContent>
+                )}
+            </CardHeader>
+
+
+        </Card>
+    )
+}

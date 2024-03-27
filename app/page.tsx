@@ -1,14 +1,11 @@
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+
+
 import { db } from "@/lib/db";
 import { revalidatePath } from 'next/cache';
+import PostForm from "./PostForm";
+import Post from "./Post";
+import { Separator } from "@/components/ui/separator"
+
 
 
 
@@ -50,6 +47,21 @@ export default async function Home() {
     return post
   }
 
+  async function deletePost(id: string) {
+    "use server"
+
+
+    const post = await db.post.delete({
+      where: {
+        id: id,
+      }
+    })
+
+    revalidatePath('/')
+    return post
+
+  }
+
   const postData = await db.post.findMany()
   console.log(postData);
 
@@ -58,47 +70,23 @@ export default async function Home() {
     <div className="mx-auto max-w-xl space-y-5">
 
 
-      <Card>
-        <CardHeader>
-          <CardTitle>CRUD</CardTitle>
-          <CardDescription>Create something awesome!</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form action={createPost}>
-            <Input name="title" placeholder="title" />
-            <Input name="body" placeholder="body" className="mt-2 mb-2" />
-            <Button className="w-full">click</Button>
-          </form>
-        </CardContent>
-
-      </Card>
+      <PostForm createPost={createPost} />
 
 
+
+      <Separator />
 
       <div>
-        <div>
-          {postData.map(post =>
-          (
-            <div key={post.id}>
-              <Card>
-                <CardHeader>
-                  <CardTitle>{post.title}</CardTitle>
-                  <CardDescription>{post.body}</CardDescription>
-                </CardHeader>
-                <form action={updatePost}>
-                  <Input name="id" value={post.id} />
-                  <Input name="title" placeholder="title" defaultValue={post.title} />
-                  <Input name="body" placeholder="body" defaultValue={post.body} className="mt-2 mb-2" />
-                  <Button className="w-full">update</Button>
-                </form>
+        {postData.map(post =>
+        (
+          <div key={post.id} className="mb-3">
 
-              </Card>
-
-            </div>
-          )
-          )}
-        </div>
+            <Post post={post} updatePost={updatePost} deletePost={deletePost} />
+          </div>
+        )
+        )}
       </div>
+
     </div>
   );
 }
