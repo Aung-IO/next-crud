@@ -8,9 +8,13 @@ import {
     CardTitle
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+
+import { toast } from "sonner"
+
 import React, { useRef } from 'react'
 
 export default function PostForm({ createPost }: any) {
+
 
     return (
         <Card>
@@ -22,8 +26,10 @@ export default function PostForm({ createPost }: any) {
                 <form action={createPost}>
                     <Input name="title" placeholder="title" />
                     <Input name="body" placeholder="body" className="mt-2 mb-2" />
-                    <Button className="w-full">click</Button>
+                    <Button className="w-full" onClick={() => { toast("New todo added") }} >add post</Button>
                 </form>
+
+
             </CardContent>
 
         </Card>
